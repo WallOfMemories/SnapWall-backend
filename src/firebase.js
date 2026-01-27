@@ -1,8 +1,9 @@
 import admin from "firebase-admin";
-import { createRequire } from "module";
 
-const require = createRequire(import.meta.url);
-const serviceAccount = require("../serviceAccountKey.json");
+// ✅ Load service account from ENV (NOT file)
+const serviceAccount = JSON.parse(
+  process.env.FIREBASE_SERVICE_ACCOUNT
+);
 
 if (!admin.apps.length) {
   admin.initializeApp({
