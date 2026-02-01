@@ -1,7 +1,6 @@
 import admin from "../src/firebase.js";
 
 export const verifyFirebaseToken = async (req, res, next) => {
-  console.log("VERIFY TOKEN MIDDLEWARE HIT");
 
   const authHeader = req.headers.authorization;
 

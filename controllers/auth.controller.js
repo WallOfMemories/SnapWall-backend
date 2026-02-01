@@ -5,8 +5,14 @@ import { transporter } from "../middleware/Email.config.js";
 
 export const createProfile = async (req, res) => {
   try {
-    console.log("CREATE PROFILE HIT");
-    const { uid, email, username, instagram, imageUrl } = req.body;
+    const uid = req.user.uid;
+    const email = req.user.email;
+    const { username, instagram, imageUrl } = req.body;
+
+    if (!req.user.email_verified) {
+      return res.status(403).json({ message: "Email not verified" });
+    }
+
 
     if (!uid || !email || !username || !imageUrl) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -97,5 +103,22 @@ export const forgotPassword = async (req, res) => {
     res.status(500).json({
       message: "Failed to send reset link",
     });
+  }
+};
+
+export const checkUser = async (req, res) => {
+  try {
+    const uid = req.user.uid; // set by verifyFirebaseToken
+
+    const userDoc = await db.collection("users").doc(uid).get();
+
+    if (userDoc.exists) {
+      return res.json({ exists: true });
+    }
+
+    res.json({ exists: false });
+  } catch (err) {
+    console.error("CHECK USER ERROR:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
