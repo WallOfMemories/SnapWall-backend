@@ -1,6 +1,5 @@
 import admin from "firebase-admin";
 
-// ✅ Load service account from ENV (NOT file)
 const serviceAccount = JSON.parse(
   process.env.FIREBASE_SERVICE_ACCOUNT
 );
